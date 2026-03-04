@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+langchain
+langchain-core
+langchain-openai
+langchain-litellm
+langchain-community
+langchain-chroma
+chromadb
+fastembed
+litellm
+psycopg2-binary
+sqlalchemy
+python-dotenv
+pydantic
+asyncpg

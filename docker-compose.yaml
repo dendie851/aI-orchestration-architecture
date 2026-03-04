@@ -1,0 +1,60 @@
+version: '3.9'
+
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    container_name: litellm-proxy
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./litellm-config.yaml:/app/config.yaml
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY:-sk-1234}
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/cs_ai_db
+    command: ["--config", "/app/config.yaml", "--port", "4000", "--detailed_debug"]
+
+  db:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=cs_ai_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  app:
+    build: ./app
+    container_name: cs-ai-app
+    depends_on:
+      - litellm
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      - LITEL_LM_URL=http://litellm-proxy:4000
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/cs_ai_db
+      - GOOGLE_API_KEY=${GEMINI_API_KEY}
+      - GOOGLE_API_KEY=${GEMINI_API_KEY}
+    volumes:
+      - ./app:/app
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+
+  ingest:
+    build: ./app
+    container_name: cs-ai-ingest
+    command: python ingest.py
+    depends_on:
+      - litellm
+    environment:
+      - LITEL_LM_URL=http://litellm-proxy:4000
+      - GOOGLE_API_KEY=${GEMINI_API_KEY}
+    volumes:
+      - ./app:/app
+volumes:
+  postgres_data:
