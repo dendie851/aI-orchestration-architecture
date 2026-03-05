@@ -38,7 +38,6 @@ This project demonstrates how to build a sophisticated AI Customer Service platf
   - [Step 6: Database Persistence (History & Memory)](#step-6-database-persistence-history--memory)
     - [6. Database Message Store](#6-database-message-store)
 
----
 
 ## 1. What is Chatbot AI RAG? (A Customer Service Story)
 
