@@ -13,7 +13,7 @@ This project demonstrates how to build a sophisticated AI Customer Service platf
   - [Step 5: End-to-End Chat & RAG Validation](#step-5-end-to-end-chat--rag-validation)
   - [Step 6: Database Persistence (History & Memory)](#step-6-database-persistence-history--memory)
 
----
+
 
 ## 1. What is Chatbot AI RAG? (A Customer Service Story)
 
@@ -36,7 +36,7 @@ Think of it as giving your AI agent an "open book" test. Instead of answering fr
 5.  **Contextual Generation (Gemini 1.5 Flash)**: We send the retrieved snippets along with the user's question to the Gemini model. This ensures the AI's response is strictly grounded in our provided data.
 6.  **Conversation Memory (PostgreSQL)**: To handle multi-turn conversations, we store the full chat history in a Postgres database. This allows the AI to maintain context over long support sessions.
 
----
+
 
 ## 3. Step-by-Step Implementation
 
@@ -47,7 +47,7 @@ The entire stack—including the AI Gateway, Database, and Main App—is managed
 ![Docker Running](./ss/1-docker-running.png)
 In this view, we can see the successful initialization of our three core services: 'litellm-proxy', 'postgres-db', and 'cs-ai-app'. Monitoring these containers is crucial because it confirms that our networking and environment variables are correctly configured, allowing the components to communicate via internal hostnames.
 
----
+
 
 ### Step 2: Configuring the AI Brain (Google Gemini)
 We use Google's Gemini 1.5 Flash as our primary "reasoning engine" due to its high speed and low latency, which is perfect for a responsive customer service experience.
@@ -76,7 +76,7 @@ We further refine the model's behavior by adjusting the 'Temperature' and 'Safet
 ![Gemini 6](./ss/2-gemini-6-list-model.png)
 This terminal output confirms that our local machine can successfully list all available Gemini models through the Google Cloud SDK. This is a critical connectivity test that proves our network can reach the Google AI endpoints without being blocked by firewalls.
 
----
+
 
 ### Step 3: Knowledge Base Ingestion
 To make the AI smart about our products, we must "feed" it our private documentation through a process called Ingestion.
@@ -89,7 +89,7 @@ This is our 'knowledge.txt' file, the source of truth for our AI. It contains sp
 ![Ingest FastEmbed](./ss/3-ingest-data-menggunakan-FastEmbed.png)
 The ingestion script is running here. It reads the text, splits it into small chunks, and uses 'FastEmbed' to turn them into vectors. The 'Sync Index' log confirms that we are cleaning old data and populating ChromaDB with fresh, updated vectors.
 
----
+
 
 ### Step 4: The LiteLLM AI Gateway Management
 LiteLLM provides a professional management layer. It allows us to manage multiple models through a single, OpenAI-compatible API dashboard.
@@ -142,7 +142,7 @@ This view shows the 'Cost Breakdown'. It calculates the exact price of each inte
 ![LiteLLM Logs](./ss/4-litellm-9-test-hit-api-ai-llm-log.png)
 The activity logs show every single request coming through the system. We can inspect the raw prompts and responses, which is essential for troubleshooting why a certain RAG query might have produced an unexpected answer.
 
----
+
 
 ### Step 5: End-to-End Chat & RAG Validation
 Finally, we test the user experience. This stage proves that the AI can successfully retrieve knowledge and answer questions.
@@ -159,7 +159,7 @@ This 'behind the scenes' view shows the raw output of the retriever. You can see
 ![Stream API](./ss/5-test-vi-be-api-chat-stream.png)
 This terminal view shows the 'Streaming' response in action. Instead of waiting 5 seconds for the whole answer, the text appears word-by-word (Server-Sent Events). This makes the chatbot feel alive and much faster to the end-user.
 
----
+
 
 ### Step 6: Database Persistence (History & Memory)
 A great customer service experience requires remembering the past. We use PostgreSQL to store every interaction.
