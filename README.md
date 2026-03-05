@@ -7,13 +7,38 @@ This project demonstrates how to build a sophisticated AI Customer Service platf
 - [2. Architecture & Technical Approach](#2-architecture--technical-approach)
 - [3. Step-by-Step Implementation](#3-step-by-step-implementation)
   - [Step 1: Environment Orchestration with Docker](#step-1-environment-orchestration-with-docker)
+    - [1. Docker Running](#1-docker-running)
   - [Step 2: Configuring the AI Brain (Google Gemini)](#step-2-configuring-the-ai-brain-google-gemini)
+    - [2.1 Gemini Project Setup](#21-gemini-project-setup)
+    - [2.2 API Key Generation](#22-api-key-generation)
+    - [2.3 Model Quota Monitoring](#23-model-quota-monitoring)
+    - [2.4 Prompt Playground Testing](#24-prompt-playground-testing)
+    - [2.5 Model Parameters & Safety](#25-model-parameters--safety)
+    - [2.6 API Model Verification](#26-api-model-verification)
   - [Step 3: Knowledge Base Ingestion](#step-3-knowledge-base-ingestion)
+    - [3.1 Raw Knowledge Base](#31-raw-knowledge-base)
+    - [3.2 FastEmbed Ingestion Script](#32-fastembed-ingestion-script)
   - [Step 4: The LiteLLM AI Gateway Management](#step-4-the-litellm-ai-gateway-management)
+    - [4.1 LiteLLM Proxy Login](#41-litellm-proxy-login)
+    - [4.2 Main Admin Dashboard](#42-main-admin-dashboard)
+    - [4.3 Scripted Model Injection](#43-scripted-model-injection)
+    - [4.4 Failover & Retry Logic](#44-failover--retry-logic)
+    - [4.5 Virtual Key Generation](#45-virtual-key-generation)
+    - [4.6 Usage Limits & Budgets](#46-usage-limits--budgets)
+    - [4.7 Key-to-Model Mapping](#47-key-to-model-mapping)
+    - [4.8 Key Activation](#48-key-activation)
+    - [4.9 Real-time API Testing](#49-real-time-api-testing)
+    - [4.10 Token Usage Analytics](#410-token-usage-analytics)
+    - [4.11 Cost Breakdown per Model](#411-cost-breakdown-per-model)
+    - [4.12 Live Request Logs](#412-live-request-logs)
   - [Step 5: End-to-End Chat & RAG Validation](#step-5-end-to-end-chat--rag-validation)
+    - [5.1 RAG Accuracy Test](#51-rag-accuracy-test)
+    - [5.2 Retriever Insight](#52-retriever-insight)
+    - [5.3 Response Streaming](#53-response-streaming)
   - [Step 6: Database Persistence (History & Memory)](#step-6-database-persistence-history--memory)
+    - [6. Database Message Store](#6-database-message-store)
 
-
+---
 
 ## 1. What is Chatbot AI RAG? (A Customer Service Story)
 
@@ -37,7 +62,6 @@ Think of it as giving your AI agent an "open book" test. Instead of answering fr
 6.  **Conversation Memory (PostgreSQL)**: To handle multi-turn conversations, we store the full chat history in a Postgres database. This allows the AI to maintain context over long support sessions.
 
 
-
 ## 3. Step-by-Step Implementation
 
 ### Step 1: Environment Orchestration with Docker
@@ -46,7 +70,6 @@ The entire stack—including the AI Gateway, Database, and Main App—is managed
 #### 1. Docker Running
 ![Docker Running](./ss/1-docker-running.png)
 In this view, we can see the successful initialization of our three core services: 'litellm-proxy', 'postgres-db', and 'cs-ai-app'. Monitoring these containers is crucial because it confirms that our networking and environment variables are correctly configured, allowing the components to communicate via internal hostnames.
-
 
 
 ### Step 2: Configuring the AI Brain (Google Gemini)
@@ -77,7 +100,6 @@ We further refine the model's behavior by adjusting the 'Temperature' and 'Safet
 This terminal output confirms that our local machine can successfully list all available Gemini models through the Google Cloud SDK. This is a critical connectivity test that proves our network can reach the Google AI endpoints without being blocked by firewalls.
 
 
-
 ### Step 3: Knowledge Base Ingestion
 To make the AI smart about our products, we must "feed" it our private documentation through a process called Ingestion.
 
@@ -88,7 +110,6 @@ This is our 'knowledge.txt' file, the source of truth for our AI. It contains sp
 #### 3.2 FastEmbed Ingestion Script
 ![Ingest FastEmbed](./ss/3-ingest-data-menggunakan-FastEmbed.png)
 The ingestion script is running here. It reads the text, splits it into small chunks, and uses 'FastEmbed' to turn them into vectors. The 'Sync Index' log confirms that we are cleaning old data and populating ChromaDB with fresh, updated vectors.
-
 
 
 ### Step 4: The LiteLLM AI Gateway Management
@@ -143,7 +164,6 @@ This view shows the 'Cost Breakdown'. It calculates the exact price of each inte
 The activity logs show every single request coming through the system. We can inspect the raw prompts and responses, which is essential for troubleshooting why a certain RAG query might have produced an unexpected answer.
 
 
-
 ### Step 5: End-to-End Chat & RAG Validation
 Finally, we test the user experience. This stage proves that the AI can successfully retrieve knowledge and answer questions.
 
@@ -158,7 +178,6 @@ This 'behind the scenes' view shows the raw output of the retriever. You can see
 #### 5.3 Response Streaming
 ![Stream API](./ss/5-test-vi-be-api-chat-stream.png)
 This terminal view shows the 'Streaming' response in action. Instead of waiting 5 seconds for the whole answer, the text appears word-by-word (Server-Sent Events). This makes the chatbot feel alive and much faster to the end-user.
-
 
 
 ### Step 6: Database Persistence (History & Memory)
